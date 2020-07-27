@@ -37,7 +37,7 @@ Electron -->
 <!-- What makes your project stand out? -->
 
 Features
-:This features simplified and revised HTML and CSS
+:This application is used to write, save, and delete notes. It uses a Bootstrap framework for the frontend and it will use an Express backend to save and retrieve data from a JSON file. It will also use HTML and API routes to return data.
 
 Code Example
 
