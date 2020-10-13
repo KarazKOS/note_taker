@@ -1,38 +1,29 @@
-// LOAD DATA
-// Link routes to journal data.
-var journalData = require("../data/journalData");
-// ROUTING
-module.exports = function (app) {
+const router = require("express").Router();
+const storeNotes = require("../db/storeNotes.js");
 
-  // API GET request
-  app.get("/api/journals", function (req, res) {
-    res.json(journalData);
-  });
+// API get request for retrieving existing notes
+router.get("/notes", function (req, res) {
+  storeNotes
+    .retrieveNotes()
+    .then(notes => res.json(notes))
 
-  // API POST request
-  app.post("/api/journals", function (req, res) {
-    journalData.push(req.body);
-    res.json("saved");
-  });
+    .catch(err => res.status(500).json(err));
+});
 
-  // API DELETE request
-  // Cycle through the request array and push the
-  // elements there into a new array, except for
-  // the one with the index of the journal that's
-  // being deleted, then make journalData equal
-  // to the new array.
-  app.delete("/api/journals/:index", function (req, res) {
-    var elem = parseInt(req.params.index);
-    var tempjournal = [];
-    for (var i = 0; i < journalData.length; i++) {
-      if (i !== elem) {
-        tempjournal.push(journalData[i]);
-      }
-    }
-    journalData = tempjournal;
+// API post request for posting a new note
+router.post("/notes", (req, res) => {
+  storeNotes
+    .addNote(req.body)
+    .then(notes => res.json(notes))
+    .catch(err => res.status(500).json(err));
+});
 
-    res.json("delete done");
-  });
+// API delete request for deleting a note
+router.delete("/notes/:id", function (req, res) {
+  storeNotes
+    .removeNote(req.params.id)
+    .then(() => res.json({ success: true }))
+    .catch(err => res.status(500).json(err));
+});
 
-
-}
+module.exports = router;

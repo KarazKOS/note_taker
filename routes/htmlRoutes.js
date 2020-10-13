@@ -1,23 +1,15 @@
-// DEPENDENCIES
-var path = require("path");
+const path = require("path");
+const router = require("express").Router();
 
+// HTML GET Requests
 
-// ROUTING
-module.exports = function(app) {
-  // HTML GET Requests
-  // Below code handles when users "visit" a page.
+router.get("/notes", function (req, res) {
+  res.sendFile(path.join(__dirname, "../public/notes.html"));
+});
 
-  app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "../public/notes.html"));
-  });
+// If no matching route is found default to index
+router.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
-  // This is for the link to the css file.
-  app.get("/styles", function(req, res) {
-    res.sendFile(path.join(__dirname, "../public/css/styles.css"));
-  });
-
-  // If no matching route is found default to home
-  app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
-  });
-};
+module.exports = router;
